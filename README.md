@@ -42,7 +42,7 @@ To run any server:
   npm run start:dev 
 ```
 
-3. Open Browser
+3. Open Browser:
 ```bash
   # graphql-apollo
   http://localhost:5000
@@ -53,3 +53,6 @@ To run any server:
   # graphql-be (api)
   http://localhost:4000/graphql
 ```
+
+
+[Postman collection](./GraphQL-Workshop.postman_collection_1.json)
