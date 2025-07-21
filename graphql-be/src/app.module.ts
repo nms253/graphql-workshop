@@ -14,6 +14,7 @@ import { PostModule } from './post/post.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      path: '/graphql' //default path
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',

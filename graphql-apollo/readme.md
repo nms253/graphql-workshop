@@ -1,3 +1,18 @@
+✅ What is GraphQL?
+A query language for APIs that lets clients request exact data they need from the server.
+
+✅ Why need GraphQL?
+GraphQL is needed to fetch only the exact data you want in a single request, making APIs faster and more flexible.
+
+## SQL vs GQL
+| Feature       | SQL                             | GraphQL (GQL)           |
+| ------------- | ------------------------------- | ----------------------- |
+| Purpose       | Query structured data from a DB | Query data from APIs    |
+| Used by       | Back-end/database systems       | Front-end/API consumers |
+| Language Type | Relational DB query language    | API query language      |
+| Example Use   | `SELECT * FROM users`           | `{ users { id name } }` |
+
+
 ## 
 | Part           | Purpose                                   |
 | -------------- | ----------------------------------------- |
