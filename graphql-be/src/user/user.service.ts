@@ -5,13 +5,37 @@ import { User } from './entities/user.entity'
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(User) private userRepo: Repository<User>) { }
+    constructor(
+        @InjectRepository(User)
+        private userRepo: Repository<User>,
+        private jwtService: JwtService,
+    ) { }
 
-    create(input: CreateUserInput) {
-        const user = this.userRepo.create(input);
+    async create(input: CreateUserInput) {
+        const { name, email, password } = input;
+        const hashed = await bcrypt.hash(password, 10);
+        const user = this.userRepo.create({ name, email, password: hashed });
         return this.userRepo.save(user);
+    }
+
+    async validateUser(email: string, password: string) {
+        const user = await this.userRepo.findOne({ where: { email } });
+        if (user && await bcrypt.compare(password, user.password)) {
+            return user;
+        }
+        return null;
+    }
+
+    async login(user: User) {
+        const payload = { email: user.email, sub: user.id };
+        return {
+            access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
+        };
     }
 
     findAll() {

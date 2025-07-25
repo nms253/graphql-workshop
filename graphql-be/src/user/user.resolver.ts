@@ -3,6 +3,10 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { LoginInput } from './dto/login-user.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/gql-auth.guard';
+import { CurrentUser } from '../decorator/current-user.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -13,8 +17,19 @@ export class UserResolver {
         return this.userService.create(input);
     }
 
+    @Mutation(() => String)
+    async login(@Args('input') input: LoginInput) {
+        const user = await this.userService.validateUser(input.email, input.password);
+        if (!user) {
+            throw new Error('Invalid credentials');
+        }
+        const token = await this.userService.login(user);
+        return token.access_token;
+    }
+
     @Query(() => [User], { nullable: true })
-    users() {
+    @UseGuards(GqlAuthGuard)
+    users(@CurrentUser() user: User) {
         return this.userService.findAll();
     }
 

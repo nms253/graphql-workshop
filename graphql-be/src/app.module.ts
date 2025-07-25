@@ -8,6 +8,8 @@ import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { PostModule } from './post/post.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -26,10 +28,11 @@ import { PostModule } from './post/post.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    PassportModule,
     UserModule,
     PostModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, JwtStrategy]
 })
 export class AppModule { }
