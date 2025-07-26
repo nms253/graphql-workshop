@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import client from '../lib/apollo-client';
 import { User } from '../types/User';
 
 const GET_USERS = gql`
@@ -13,7 +12,7 @@ const GET_USERS = gql`
 `;
 
 export default function Home() {
-  const { data, loading, error } = useQuery(GET_USERS, { client });
+  const { data, loading, error } = useQuery(GET_USERS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

@@ -1,6 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
 import { useState } from 'react';
-import client from '../lib/apollo-client';
 
 const DELETE_USER = gql`
   mutation DeleteUser($id: ID!) {
@@ -10,7 +9,7 @@ const DELETE_USER = gql`
 
 export default function DeleteUserPage() {
   const [id, setId] = useState('');
-  const [deleteUser, { data, loading, error }] = useMutation(DELETE_USER, { client });
+  const [deleteUser, { data, loading, error }] = useMutation(DELETE_USER);
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
