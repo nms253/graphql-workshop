@@ -8,8 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); // Enables DTO validation
   app.enableCors({
-    origin: 'http://localhost:3000', // <-- Frontend URL (change if needed)
-    // credentials: true, // Optional: if you're sending cookies/auth headers
+    origin: 'http://localhost:3001', // allow frontend dev server
+    //credentials: true, // if you're using cookies or auth headers
   });
 
   await app.listen(process.env.PORT ?? 4000);
