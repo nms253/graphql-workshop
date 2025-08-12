@@ -33,8 +33,7 @@ export const getUsers = createAsyncThunk('users/fetch', async () => {
           email
         }
       }
-    `,
-        fetchPolicy: 'no-cache',
+    `
     });
 
     return res.data.users;
@@ -65,15 +64,13 @@ const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        deleteUser(state, action: PayloadAction<string>) {
-            state.users = state.users.filter(user => user.id !== action.payload);
-        },
     },
     extraReducers: builder => {
         builder
             // Fetch users
             .addCase(getUsers.pending, state => {
                 state.loading = true;
+                state.error = undefined;
             })
             .addCase(getUsers.fulfilled, (state, action) => {
                 state.loading = false;
@@ -94,5 +91,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { deleteUser } = userSlice.actions;
+// export const { } = userSlice.actions;
 export default userSlice.reducer;

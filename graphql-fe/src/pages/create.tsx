@@ -14,6 +14,7 @@ const CREATE_USER = gql`
 export default function CreateUserPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  //  const [createUser, { data, loading, error }] = useMutation(CREATE_USER, { client });
   const [createUser, { data, loading, error }] = useMutation(CREATE_USER);
 
   const handleSubmit = async (e: React.FormEvent) => {

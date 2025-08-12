@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signup } from '../redux/slices/auth-slice';
 import { RootState } from '../redux/store';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useSelector } from 'react-redux';
 
 export default function Signup() {
     const dispatch = useAppDispatch();
     const router = useRouter();
-    const { status, user, error } = useAppSelector((s: RootState) => s.auth);
+    const { status, user, token, error } = useSelector((state: RootState) => state.auth);
     const [form, setForm] = useState({ name: '', email: '', password: '' });
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,6 +18,10 @@ export default function Signup() {
             router.push('/');
         }
     };
+
+    useEffect(() => {
+        if (token) router.push('/');
+    }, []);
 
     if (user) return <p>Already signed in as {user.email}</p>;
 

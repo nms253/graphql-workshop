@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ID, Context } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
@@ -7,17 +7,21 @@ import { LoginInput } from './dto/login-user.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/gql-auth.guard';
 import { CurrentUser } from '../decorator/current-user.decorator';
+import { Public } from 'src/decorator/public.decorator';
+import { GqlContextType } from 'src/gql-context.type';
 
 @Resolver(() => User)
 export class UserResolver {
     constructor(private readonly userService: UserService) { }
 
     @Mutation(() => User)
+    @Public()
     createUser(@Args('input') input: CreateUserInput) {
         return this.userService.create(input);
     }
 
     @Mutation(() => String)
+    @Public()
     async login(@Args('input') input: LoginInput) {
         const user = await this.userService.validateUser(input.email, input.password);
         if (!user) {
@@ -28,12 +32,14 @@ export class UserResolver {
     }
 
     @Query(() => [User], { nullable: true })
-    @UseGuards(GqlAuthGuard)
-    users(@CurrentUser() user: User) {
+    users(@Context() context: GqlContextType) {
+        console.log("🚀 ~ context.user:", context.user)
         return this.userService.findAll();
     }
 
     @Query(() => User, { nullable: true })
+    // @UseGuards(GqlAuthGuard)
+    // users(@CurrentUser() user: User) {
     user(@Args('id', { type: () => ID }) id: number) {
         return this.userService.findOne(id);
     }

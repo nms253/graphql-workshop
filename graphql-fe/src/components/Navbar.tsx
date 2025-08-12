@@ -21,7 +21,7 @@ export default function Navbar() {
         router.push('/signin');
     };
 
-    if (!mounted) return null; // ✅ prevents hydration mismatch
+    if (!mounted) return null; // prevents hydration mismatch
 
     return (
         <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>

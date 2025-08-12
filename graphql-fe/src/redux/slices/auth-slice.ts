@@ -51,7 +51,8 @@ const initialState: AuthState = {
   user: null,
   token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
   // token: null,
-  status: 'idle'
+  status: 'idle',
+  error: ''
 };
 
 const authSlice = createSlice({
@@ -64,20 +65,36 @@ const authSlice = createSlice({
     }
   },
   extraReducers: builder => {
+    // Signup
     builder
-      .addCase(signup.pending, (s) => { s.status = 'loading'; s.error = undefined; })
-      .addCase(signup.fulfilled, (s, a) => {
-        s.status = 'succeeded'; s.user = a.payload.user; s.token = a.payload.token;
+      .addCase(signup.pending, (state) => {
+        state.status = 'loading';
+        state.error = undefined;
       })
-      .addCase(signup.rejected, (s, a) => { s.status = 'failed'; s.error = a.payload as string; })
+      .addCase(signup.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      })
 
-      .addCase(login.pending, (s) => { s.status = 'loading'; s.error = undefined; })
+      // Login
+      .addCase(login.pending, (state) => {
+        state.status = 'loading';
+        state.error = undefined;
+      })
       .addCase(login.fulfilled, (state, action) => {
         // state.user = action.payload.user;
         state.token = action.payload;
         state.status = 'succeeded';
       })
-      .addCase(login.rejected, (s, a) => { s.status = 'failed'; s.error = a.payload as string; });
+      .addCase(login.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload as string;
+      });
   }
 });
 export const { logout } = authSlice.actions;
