@@ -10,6 +10,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
         super();
     }
 
+    // this makes Passport work with GraphQL
     getRequest(context: ExecutionContext) {
         const ctx = GqlExecutionContext.create(context);
         return ctx.getContext().req;
@@ -34,7 +35,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
                 ? canActivateResult
                 : await lastValueFrom(canActivateResult);
 
-        // Inject user into context
+        // Inject user into context manually
         const ctx = GqlExecutionContext.create(context);
         const req = ctx.getContext().req;
         ctx.getContext().user = req.user;
@@ -60,3 +61,9 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
 
 // You now always return a Promise<boolean>, not Promise<Observable<boolean>>.
 // lastValueFrom() is used to unwrap any Observable<boolean> if returned by super.canActivate().
+
+
+// NestJS Auth Guards (like AuthGuard('jwt')) only attach the user to: req.user
+// But in GraphQL, there's no native req — everything happens through the context.
+// So if you don't set up your GraphQLModule's context function like: context: ({ req }) => ({ req, user: req.user })
+// ...then your GraphQL resolvers won't see context.user, even though req.user exists.

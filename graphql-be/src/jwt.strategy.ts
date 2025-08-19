@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    // called automatically by Passport after the JWT token has Verified using your secret key.
+    // called automatically by Passport after the JWT token Verified using secret key.
     // Passport sets the returned object as req.user
     async validate(payload: any) {
         return { userId: payload.sub, email: payload.email };
