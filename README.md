@@ -39,7 +39,7 @@ To run any server:
   npm run dev
 
   # graphql-be (api)
-  npm run start:dev 
+  npm run dev 
 ```
 
 3. Open Browser:

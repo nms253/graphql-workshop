@@ -44,7 +44,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') {
 }
 
 
-// Why it's needed: Because the default AuthGuard('jwt') expects a traditional HTTP request,
+// the default AuthGuard('jwt') expects a traditional HTTP request,
 // but GraphQL wraps it differently. This override adapts it to GraphQL.
 
 // getRequest() is called automatically by NestJS when you extend AuthGuard.

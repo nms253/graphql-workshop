@@ -2,26 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { gql } from '@apollo/client';
 import client from '../../graphql/apollo-client';
-
-interface User {
-    id: string;
-    name: string;
-    email: string;
-}
-
-interface UsersState {
-    users: User[];
-    loading: boolean;
-    error?: string;
-}
+import { UsersState } from '@/interfaces/User';
 
 const initialState: UsersState = {
     users: [],
     loading: false,
     error: ''
 };
-
-
 
 export const getUsers = createAsyncThunk('users/fetch', async () => {
     const res = await client.query({
@@ -64,6 +51,9 @@ const userSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
+        clearUserList(state) {
+            state.users = []
+        }
     },
     extraReducers: builder => {
         builder
@@ -91,5 +81,5 @@ const userSlice = createSlice({
     },
 });
 
-// export const { } = userSlice.actions;
+export const { clearUserList } = userSlice.actions;
 export default userSlice.reducer;
