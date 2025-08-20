@@ -18,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 }
 
+// [jwtFromRequest: ExtractJwt] // More options
 // ExtractJwt.fromUrlQueryParameter('token')
 // ExtractJwt.fromBodyField('access_token')
 // jwtFromRequest: (req) => req.cookies['jwt']
