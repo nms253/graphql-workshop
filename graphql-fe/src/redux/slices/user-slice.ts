@@ -4,48 +4,47 @@ import { gql } from '@apollo/client';
 import client from '../../graphql/apollo-client';
 import { UsersState } from '@/interfaces/User';
 
-const initialState: UsersState = {
-    users: [],
-    loading: false,
-    error: ''
-};
+const GET_USERS_QUERY = gql`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+    }
+  }
+`;
+
+const DELETE_USER_MUTATION = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id)
+  }
+`;
+
 
 export const getUsers = createAsyncThunk('users/fetch', async () => {
     const res = await client.query({
-        query: gql`
-      query GetUsers {
-        users {
-          id
-          name
-          email
-        }
-      }
-    `
+        query: GET_USERS_QUERY,
     });
 
     return res.data.users;
 });
 
-export const deleteUserById = createAsyncThunk(
-    'users/deleteUser',
-    async (userId: string | number, { rejectWithValue }) => {
-        try {
-            const response = await client.mutate({
-                mutation: gql`
-                mutation DeleteUser($id: ID!) {
-                    deleteUser(id: $id)
-                }`,
-                variables: {
-                    id: userId,
-                },
-            });
+export const deleteUserById = createAsyncThunk('users/deleteUser', async (userId: string | number, { rejectWithValue }) => {
+    try {
+        const response = await client.mutate({ mutation: DELETE_USER_MUTATION, variables: { id: userId }, });
 
-            return userId;
-        } catch (error: any) {
-            return rejectWithValue(error.message || 'Failed to delete user');
-        }
+        return userId;
+    } catch (error: any) {
+        return rejectWithValue(error.message || 'Failed to delete user');
     }
+}
 );
+
+const initialState: UsersState = {
+    users: [],
+    loading: false,
+    error: ''
+};
 
 const userSlice = createSlice({
     name: 'users',
